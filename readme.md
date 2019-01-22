@@ -69,6 +69,8 @@ You can inject all the variables that the generator defines into your files usin
 * `layer`
 * `target`
 * `vendorprefix`
+* `configlayername`
+* `confignameprefix`
 
 ***Note***
 
