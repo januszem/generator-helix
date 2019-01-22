@@ -105,6 +105,35 @@ module.exports = class extends yeoman {
 		});
 	}
 
+	askForFolderStructure() {
+		const done = this.async();
+		const questions = [{
+			type: 'list',
+			name: 'configConvention',
+			message: 'What folder structure do you want to be applied on config files?',
+			choices: [
+				{
+					name: 'App_Config/Include/Layer/ProjectName.ConfigName.config?',
+					value: true
+				}, {
+					name: 'App_Config/Include/Layer.ProjectName/ConfigName.config?',
+					value: false
+				},
+			],
+		}];
+
+		this.prompt(questions).then((answers) => { 
+			if(answers.configConvention){
+				this.configLayerName = this.layer;
+				this.configNamePrefix = this.settings.ProjectName + '.';
+			}else{
+				this.configLayerName = this.layer + '.' + this.settings.ProjectName;
+				this.configNamePrefix = '';
+			}
+			done();
+		});
+	}
+
 	askTargetFrameworkVersion() {
 		const done = this.async();
 		const questions = [{
@@ -130,6 +159,9 @@ module.exports = class extends yeoman {
 		this.templatedata.layer = this.layer;
 		this.templatedata.lowercasedlayer = this.layer.toLowerCase();
 		this.templatedata.target = this.target;
+		this.templatedata.configlayername = this.configLayerName;
+		this.templatedata.confignameprefix = this.configNamePrefix;
+
 	}
 
 	_copyProjectItems() {
@@ -204,8 +236,8 @@ module.exports = class extends yeoman {
 		const serializationDestinationFile = path.join(
 			this.settings.ProjectPath,
 			'App_Config/Include',
-			this.settings.LayerPrefixedProjectName,
-			'serialization.config'
+			this.configLayerName,
+			this.configNamePrefix + 'Serialization.config'
 		);
 		this.fs.copyTpl(this.templatePath('_serialization.config'), this.destinationPath(serializationDestinationFile), this.templatedata);
 	}

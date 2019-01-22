@@ -60,7 +60,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Config\Include\<%= layerprefixedprojectname %>\Serialization.config" />
+    <Content Include="App_Config\Include\<%= configlayername %>\<%= confignameprefix %>Serialization.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
